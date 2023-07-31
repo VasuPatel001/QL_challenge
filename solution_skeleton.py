@@ -8,6 +8,7 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from logs import setup_logger
 from pathlib import Path
+import json
 
 app = FastAPI()
 # Set up the static files (JS, CSS, images, etc.) directory
@@ -51,33 +52,33 @@ async def train(n_components: int, body: coordinates, epochs: int = 1000):
     except BaseException as e:
         logger.warning(f'Encountered exception when extracting coordinates: {e}')
 
-    # host and train GMM model using 'x' torch.tensor
+    # host, train GMM model using 'x' torch.tensor and extract learnt model's parameter
     try:
         model = GMMSimple(n_components=n_components)
         parameters = model.pi, model.mu, model.sigma
         optimizer = torch.optim.Adam(parameters, lr=1e-3,
                                      betas=(0.9, 0.999), eps=1e-08,
                                      weight_decay=0)
-        logger.info(f'Model confingurations are, \n\tmodel: {model}, {parameters}, \n\t{optimizer}')
+        logger.info(f'Model confingurations: \n\tmodel: {model}, \n\tpi: {model.pi}, \n\tmu: {model.mu}, \n\tsigma: {model.sigma}, \n\t{optimizer}')
         loss = train_model(model=model,
                            optimizer=optimizer,
                            x=x,
                            n_epochs=epochs)
 
-        logger.info(f'Model training loss: {loss}')
+        logger.info(f'GMM model loss: {loss}')
         # Extract GMM parameters after training
         data_mean = float(x.mean())
         data_std = float(x.std())
-        logger.info(f'Model training loss: {data_mean, type(data_mean), data_std, type(data_std)}')
+
         pi, mu, sigma = extract_gmm_parameters(model=model,
                                                data_mean=data_mean,
                                                data_std=data_std)
-        logger.info(f'GMM model loss: {loss}')
         logger.info(f'GMM model parameters are: \n\tpi:{pi}, \n\tmu: {mu}, \n\tsigma: {sigma}')
-        json_response = {'pi': pi,
-                         'mu': mu,
-                         'sigma': sigma}
+
+        json_response = json.dumps({'pi': pi.tolist(),
+                                    'mu': mu.tolist(),
+                                    'sigma': sigma.tolist()})
         return JSONResponse(content=json_response)
     except BaseException as e:
         logger.warning(f'Encountered exception when retrieving model parameters: {e}')
-        return HTMLResponse(content="Not Found", status_code=404)
+        return HTMLResponse(content="Model Parameters Not Found", status_code=404)
