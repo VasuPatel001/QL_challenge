@@ -32,7 +32,7 @@ Q&A/Judgement criteria:
     b. GMM model in `gmm.py` trains for 1D data (`x`), I would consider testing it for 2D data to test the validity beyond 1D data.
 
 4. Logging and Model Versioning:
-    I have 
+    I have implemented logging and model versioning. 
 
 5. Run time complexity:
     The training runtime complexity of a Gaussian mixture model in PyTorch is O(n^3) where n is the number of data points. 

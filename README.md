@@ -16,6 +16,7 @@ Vasu Patel has attempted to solve the QL challenge (create an interactive human-
 6. Enter data points by clicking in the input window.
 7. Press `p` for training model with input data points and extracting model parameters to generate a graph.
 8. This repository implements model versioning by saving the trained model(s) in the root directory (i.e. `QL_challenge`).
+9. Logs are saved in `./static/logs.txt`
 
 ## Assumptions, Q&A
 Assumptions, Q&A related to judgement, and clarifying question can be found in `./Q_and_A.txt`.
