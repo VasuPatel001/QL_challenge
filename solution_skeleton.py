@@ -38,7 +38,8 @@ class coordinates(BaseModel):
 # train endpoint
 @app.post('/train')
 async def train(n_components: int, body: coordinates, epochs: int = 1000):
-    logger.info(f'**************** NEW TRAIN REQUEST @ {datetime.datetime.now()} ****************')
+    date_time = datetime.datetime.now()
+    logger.info(f'**************** NEW TRAIN REQUEST @ {date_time} ****************')
     logger.info(f'Input for training are: \n\tn_components: {n_components} \n\tepochs: {epochs} \n\t{body}')
     # extract the coordinates from 'body' and pass the 'x' tensor to gmm model
     try:
@@ -73,6 +74,10 @@ async def train(n_components: int, body: coordinates, epochs: int = 1000):
                                                data_mean=data_mean,
                                                data_std=data_std)
         logger.info(f'GMM model parameters are: \n\tpi:{pi}, \n\tmu: {mu}, \n\tsigma: {sigma}')
+
+        # save the model for model versioning
+        torch.save(model, f'model_{date_time}.pt')
+        logger.info(f'Model saved @ ./model_{date_time}.pt')
 
         json_response = json.dumps({'pi': pi.tolist(),
                                     'mu': mu.tolist(),

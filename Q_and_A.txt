@@ -1,0 +1,65 @@
+Assumptions
+1. Optimizer choice: I have chosen Adams optimizer (torch.optim.Adams) because Adams optimizer work well for most of the ML optimization task.
+    I have chosen default values of Adams hyper-parameters:
+    learning rate=1e-3, betas=(0.9, 0.999), eps=1e-08, weight_decay=0
+2. Input coordinates data type:
+    From `./static/scripts.js` line 123, 197
+    Data type of input coordinates were understood to be of `list[dict]` where,
+    coordinates: [{'x': x1, 'y': y1}, {'x': x2, 'y': y2}, ... {'x': xn, 'y': yn}]
+
+
+Q&A/Judgement criteria:
+1. Compatiblity with Ubuntu 20.04 VM?
+    Yes, the repository should work on Ubuntu 20.04 VM. I was working on MacBook Air (macOS 13.4)
+
+2. Additional requirements:
+    Additional installation requirements have been provided in `requirements.txt`.
+
+3. Testing considerations:
+    a. When all input data points contains same value for x coordinate, model is unable to find GMM parameters with following error message,
+        Eg: Input data: "coordinates": [{"x": 0, "y": 2}, {"x": 0, "y": 2}, {"x": 0, "y": 6}, {"x": 0, "y": 2}]
+        
+        Error message returned with status code 404:
+            Expected value argument (Tensor of shape (4,)) to be within the support (Real()) of the distribution MixtureSameFamily(
+            Categorical(probs: torch.Size([1, 2]), logits: torch.Size([1, 2])),
+            Normal(loc: torch.Size([1, 2]), scale: torch.Size([1, 2]))), but found invalid values:
+            tensor([nan, nan, nan, nan])
+        
+        This happens because in `gmm.py`, class GMMSimple > __init__() initializes the parameters with only 1 starting condition.
+        However in practice, one often runs the GMM procedure several times, with different starting conditions, to avoid mistaking a local optimum for a global one.
+        More in this link: https://stats.stackexchange.com/questions/145458/when-does-the-em-for-gaussian-mixture-model-has-one-of-the-gaussian-diminish-to
+
+    b. GMM model in `gmm.py` trains for 1D data (`x`), I would consider testing it for 2D data to test the validity beyond 1D data.
+
+4. Logging and Model Versioning:
+    I have 
+
+5. Run time complexity:
+    The training runtime complexity of a Gaussian mixture model in PyTorch is O(n^3) where n is the number of data points. 
+    This is because the model needs to compute the log likelihood of each data point under each Gaussian component, which requires O(n^2) computation. 
+    The model also needs to compute the covariance matrix of each Gaussian component, which requires O(n^3) computation. 
+    Therefore, the total runtime complexity is O(n^3).
+
+6. Method implemented:
+    a. I implemented the FastAPI endpoint `/train` to take input data consisting of x, y coordinates, from which I extract x coordinates,
+        because we are concerned with Gaussian distributions in just 1D (for x-coordinate values)
+    b. Model versioning is implemented, so as each model trained is saved in the root directory (i.e. `QL_challenge`).
+
+7. Challenges faced:
+    I had worked on deploying ML models to production (on cloud) using Docker containers, however it was first time me directly working on FastAPI.
+    Hence, I faced initial challenges to learn new technology, but it was a good learning curve for me where I was able to pick up on tools
+    to implement and generate a serving model.
+
+8. Scope of improvement:
+    If I had more time to work on this, I would consider implementing:
+    a. GMM for 2D data.
+    b. Develop a Docker image to make the system platform independent.
+
+
+Clarifying Questions:
+1. `gmm.py` line 45 takes input of just `x coordinates` and not `y coordinates`?
+2. I have implemented `/train` endpoint after reading `./static/script.js`. 
+    Hence my `/train` endpoint returns JSONResponse of {pi, mu, sigma} which is running good on backend (http://localhost:8000/docs).
+    However, when I try to test it on frontend: after giving input data points, and pressing `p` somehow it does not plot GMM.
+    I have made NO changes to `./static/script.js` and I would want to discuss the fronend implementation with your team to be able to make 
+    the web application work on frontend as well.
