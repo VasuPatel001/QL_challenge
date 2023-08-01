@@ -1,17 +1,18 @@
-2023-07-31 18:40:10,530 - logs - INFO - Input for training are: 
-	n_components: 2 
+2023-07-31 19:17:06,135 - logs - INFO - **************** NEW TRAIN REQUEST @ 2023-07-31 19:17:06.135937 ****************
+2023-07-31 19:17:06,136 - logs - INFO - Input for training are: 
+	n_components: 3 
 	epochs: 1000 
 	coordinates=[{'x': 1, 'y': 2}, {'x': 3, 'y': 4}, {'x': 5, 'y': 6}]
-2023-07-31 18:40:10,547 - logs - INFO - Extracted x coordinates are: 
+2023-07-31 19:17:06,138 - logs - INFO - Extracted x coordinates are: 
 	tensor([1., 3., 5.])
-2023-07-31 18:40:10,550 - logs - INFO - Model confingurations: 
+2023-07-31 19:17:06,142 - logs - INFO - Model confingurations: 
 	model: GMMSimple(), 
 	pi: Parameter containing:
-tensor([[0.5000, 0.5000]], requires_grad=True), 
+tensor([[0.3333, 0.3333, 0.3333]], requires_grad=True), 
 	mu: Parameter containing:
-tensor([[-2.,  2.]], requires_grad=True), 
+tensor([[-2.,  0.,  2.]], requires_grad=True), 
 	sigma: Parameter containing:
-tensor([[0.5000, 0.5000]], requires_grad=True), 
+tensor([[0.3333, 0.3333, 0.3333]], requires_grad=True), 
 	Adam (
 Parameter Group 0
     amsgrad: False
@@ -25,8 +26,8 @@ Parameter Group 0
     maximize: False
     weight_decay: 0
 )
-2023-07-31 18:40:11,039 - logs - INFO - GMM model loss: 1.8924442529678345
-2023-07-31 18:40:11,040 - logs - INFO - GMM model parameters are: 
-	pi:[0.4999997 0.5000003], 
-	mu: [0.61084366 5.3891554 ], 
-	sigma: [2.1034722 2.1034725]
+2023-07-31 19:17:06,632 - logs - INFO - GMM model loss: 1.4691969156265259
+2023-07-31 19:17:06,633 - logs - INFO - GMM model parameters are: 
+	pi:[0.16454835 0.6709033  0.16454832], 
+	mu: [0.5131905 3.0000727 5.4868107], 
+	sigma: [1.5309713 1.5425769 1.5309718]

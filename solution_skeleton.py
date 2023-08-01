@@ -9,14 +9,12 @@ from pydantic import BaseModel
 from logs import setup_logger
 from pathlib import Path
 import json
+import datetime
 
 app = FastAPI()
 # Set up the static files (JS, CSS, images, etc.) directory
 app.mount("/static", StaticFiles(directory="static"), name="static")
 # create a "/static/logs.txt" file
-#######################################
-# Pending: should create logs.txt if it doesn't exist
-#######################################
 file_path = Path("./static/logs.txt")
 with open(file_path, 'w') as f:
     logger = setup_logger(file_path)
@@ -40,6 +38,7 @@ class coordinates(BaseModel):
 # train endpoint
 @app.post('/train')
 async def train(n_components: int, body: coordinates, epochs: int = 1000):
+    logger.info(f'**************** NEW TRAIN REQUEST @ {datetime.datetime.now()} ****************')
     logger.info(f'Input for training are: \n\tn_components: {n_components} \n\tepochs: {epochs} \n\t{body}')
     # extract the coordinates from 'body' and pass the 'x' tensor to gmm model
     try:
