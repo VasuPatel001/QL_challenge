@@ -52,8 +52,9 @@ Q&A/Judgement criteria:
 
 8. Scope of improvement:
     If I had more time to work on this, I would consider implementing:
-    a. GMM for 2D data.
-    b. Develop a Docker image to make the system platform independent.
+    a. Work with frontend team to fix why GMM plot is not being generated.
+    b. GMM for 2D data.
+    c. Develop a Docker image to make the system platform independent.
 
 
 Clarifying Questions:

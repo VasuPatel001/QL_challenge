@@ -7,7 +7,7 @@ Vasu Patel has attempted to solve the QL challenge (create an interactive human-
 2. Backend accept these data points and train the Gaussian Mixture Model (GMM).
 3. Bacend return the GMM parameters to the front-end for plotting GMM.
 
-## Steps
+## Steps to follow
 1. Create a python venv using `python -m venv ./ql_venv` in the root directory (i.e. `QL_challenge`).
 2. Activate venv using `source ./ql_venv/bin/activate`.
 3. Install requirements listed in requirements.txt using `pip install -r requirements.txt`.
@@ -19,3 +19,8 @@ Vasu Patel has attempted to solve the QL challenge (create an interactive human-
 
 ## Assumptions, Q&A
 Assumptions, Q&A related to judgement, and clarifying question can be found in `./Q_and_A.txt`.
+
+## Backend implementation
+Backend FastAPI can be found here: `http://localhost:8000/docs`.
+Schemas can be found here: `http://localhost:8000/redoc`.
+FastAPI Backend has been found working well and the screenshots are provided in `./backend/`
